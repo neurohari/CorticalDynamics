@@ -14,6 +14,7 @@ presented. Hence only step-targets signal is simulated here. '''
 
 use_cuda = torch.cuda.is_available()
 device = torch.device('cuda:0' if use_cuda else 'cpu')
+device = 'cpu'
 
 class feedback_controller(nn.Module):
     def __init__(self, dh, home_joint_state):
