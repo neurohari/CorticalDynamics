@@ -33,6 +33,7 @@ import torch
 
 use_cuda = torch.cuda.is_available()
 device = torch.device('cuda:0' if use_cuda else 'cpu')
+device = 'cpu'
 
 class muscular_arm():
     def __init__(self, dh=0.01):
