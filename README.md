@@ -9,7 +9,16 @@ Code for training neural network controllers to emulate posture and reach tasks.
   3. Scipy
   4. Matplotlib
   
+## File information
+Each folder has three python scripts.
+1. muscularArmClass.py contains dynamics of 2-DOF planar arm containing shoulder and elbow joints and muscle activation dynamics. 
+2. NetworkClass.py contains script for neural network and cost computation for the executed movements.
+3. optimizingscript.py runs the posture/reach tasks and optimizes/trains neural networks to learn an optimal control policy.
+
+
 ## To Run.
 1. Go to posture/reach folder
 2. Open and execute script titled "optimizingscript_xxtask.py" where xx = reach for reach task and xx = posture for posture task
 3. Data is saved as .mat files in the folders named "data"
+
+
