@@ -116,7 +116,7 @@ while num_optimizations <= max_simulations:
     posture_sim.to(device)
     
     # decide if the network has recurrent connections or not
-    posture_sim.rec_connection_status = 'False'
+    posture_sim.rec_connection_status = rec_connection_status
     
     # Set the neural newtork paramters to be optimized.  
     lrate = 3.0e-4
@@ -167,7 +167,7 @@ while num_optimizations <= max_simulations:
         total_loss_for_plotting[epoch] = loss.item()
         
         
-        if epoch%100 == 0:
+        if epoch%10 == 0:
             print("Cur instance Loss: {:.6f}".format(loss.item()), end=' ')
             print(' after Epoch number: {}/{}...'.format(epoch, EPOCHS), end=' ')
             print('num_optimizations: {}/{}'.format(num_optimizations, max_simulations, ))
@@ -184,6 +184,10 @@ while num_optimizations <= max_simulations:
             
             plt.figure()
             plt.plot(posture_sim.collector_outplayeractivity[:, 0, :].data.cpu().numpy())
+            plt.show()
+            
+            plt.figure()
+            plt.plot(np.log(total_loss_for_plotting[1:epoch]))
             plt.show()
             
         if epoch%100 == 0:
@@ -211,7 +215,7 @@ while num_optimizations <= max_simulations:
             
             scipy.io.savemat('data/Cost_' + file_name + fb_type + file_no + '.mat', {'costcurve':cost_curve_for_plotting})
             
-        if num_optimizations == 1 and epoch > 1000:
+        if num_optimizations == 1 and epoch > 100:
             torch.save(posture_sim.state_dict(), 'Optimizednetwork_' + file_name + fb_type + file_no + '.pth')
     
     num_optimizations += 1
