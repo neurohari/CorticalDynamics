@@ -131,9 +131,9 @@ class feedback_controller(nn.Module):
             # total controller inputs
             # can either use conditioned inputs (soft-normalized) within the range of joint motion 
             # (useful in fast training of NOREC network)
-            network_inputs = torch.cat((des_pos, 2*jpos_fb, 0.5*jvel_fb, mus_fb), 1) 
+            network_inputs = torch.cat((des_pos, 2*jpos_fb, 0.5*jvel_fb, mus_fb), 1) # [2, 0.5] is not strictly necessary for REC network, can also se [1,1]
             # or use raw sensory data from the muscular arm from next line
-            # network_inputs = torch.cat((des_pos, jpos_fb, jvel_fb, mus_fb), 1)
+            # network_inputs = torch.cat((des_pos, jpos_fb, jvel_fb, mus_fb), 1) # if this line used for NOREC network instead of 134, the optimization takes very long time
 
             # activate the network layers with network_inputs
             prev_inplayer_outputs = inplayer_outputs 
@@ -212,7 +212,7 @@ def costcriterionPosture(posture_sim, des_pos, actual_pos, actual_vel):
     loss += (0.5 * 0.5/(num_time-200))*torch.norm(actual_vel[:100, :])**2 # velocity penalty pre-perturbation
     loss += (0.5 * 0.5/(num_time-200))*torch.norm(actual_vel[200:, :])**2 # velocity penalty post 1000ms after perturbation
     # penalize muscle and neural activities 
-    # (the penalty coefficients are example among a wide-range of plausible qunatities that yield similar results)
+    # (the penalty coefficients are example among a wide-range of plausible quantities that yield similar results)
     loss += (1.0e-2/(num_time-200))*(torch.norm(posture_sim.collector_muscleactivity[:100,:,:])**2) # penalty on high muscle activities before movement/perturbation
     loss += (1.0e-5/(num_time-200))*(torch.norm(posture_sim.collector_muscleactivity[100:200,:,:])**2) # penalty on high muscle activities during movement/perturbation
     loss += (1.0e-5/(num_time))*(torch.norm(posture_sim.collector_inplayeractivity[:,:,:])**2) # penalty on high neural activities
