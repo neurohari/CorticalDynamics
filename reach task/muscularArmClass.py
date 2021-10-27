@@ -39,36 +39,33 @@ class muscular_arm():
     def __init__(self, dh=0.01):
         super(muscular_arm, self).__init__()
         
-        # fixed Monkey arm parameters (0=shoulder; 1=elbow)
-        self.i1 = torch.tensor([0.025]).to(device) # kg*m**2 shoulder inertia 
+        # fixed Monkey arm parameters (1=shoulder; 2=elbow) (refer to Lillicrap et al 2013, Li&Todorov2007)
+        self.i1 = torch.tensor([0.025]).to(device) # kg*m**2 shoulder inertia
         self.i2 = torch.tensor([0.045]).to(device) # kg*m**2 elbow inertia
         self.m1 = torch.tensor([0.2108]).to(device) # kg mass of shopulder link
         self.m2 = torch.tensor([0.1938]).to(device) # kg mass of elbow link
-        self.l1 = torch.tensor([0.145]).to(device) # meter 
+        self.l1 = torch.tensor([0.145]).to(device) # meter
         self.l2 = torch.tensor([0.284]).to(device) # meter
         self.s1 = torch.tensor([0.0749]).to(device)
         self.s2 = torch.tensor([0.0757]).to(device)
         # fixed joint-friction
-       # self.b11 = torch.tensor([0.5]).to(device) # normal params
-       # self.b22 = torch.tensor([0.5]).to(device) # normal params
-        self.b11 = torch.tensor([0.5]).to(device) 
-        self.b22 = torch.tensor([0.5]).to(device) 
-        self.b21 = torch.tensor([0.1]).to(device)
-        self.b12 = torch.tensor([0.1]).to(device)
-        
+        self.b11 = torch.tensor([0.5]).to(device) # Could use low values like 0.05 also
+        self.b22 = torch.tensor([0.5]).to(device) # Could use low values like 0.05 also
+        self.b21 = torch.tensor([0.1]).to(device) # Could use low values like 0.02 - 0.05 also
+        self.b12 = torch.tensor([0.1]).to(device) # Could use low values like 0.02 - 0.05 also
+
         # inertial matrix tmp vars
         self.a1 = (self.i1 + self.i2) + (self.m2 * self.l1**2)
         self.a2 = self.m2 * self.l1 * self.s2
         self.a3 = self.i2
-        
-        # Moment arm param
-        self.M = torch.tensor([[2.0, -2.0, 0.0, 0.0, 1.50, -2.0], [0.0, 0.0, 2.0, -2.0, 2.0, -1.50]]).to(device)
-        # to remove the bi-articular muscles use
-        #self.M = torch.tensor([[2.0, -2.0, 0.0, 0.0, 0.00, 0.0], [0.0, 0.0, 2.0, -2.0, 0.0, 0.0]]).to(device) 
-        
-        # Muscle properties
+
+        # Moment arm param in centimeters, but it can be directly used with this code...
+        # ...as the scaling can be assumed to happen at the output layer (1 a.u = 100N force)
+        self.M = torch.tensor([[2.0, -2.0, 0.0, 0.0, 1.50, -2.0], [0.0, 0.0, 2.0, -2.0, 2.0, -1.50]]).to(device) 
+
+        # Muscle properties 
         self.theta0 = 0.0175*torch.tensor([[15.0, 4.88, 0.00, 0.00, 4.5, 2.12], [0.00, 0.00, 80.86, 109.32, 92.96, 91.52]]).to(device)
-        self.L0 = torch.tensor([[7.32, 3.26, 6.4, 4.26, 5.95, 4.04]]).to(device)
+        self.L0 = torch.tensor([[7.32, 3.26, 6.4, 4.26, 5.95, 4.04]]).to(device) # in centimeters but ( self.M / self.L0 ) ratio will be unaffected as self.M is in centimeters too
         self.beta = 1.55
         self.omega = 0.81
         self.rho = 2.12
