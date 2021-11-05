@@ -127,7 +127,7 @@ class muscular_arm():
         
 
         # compute determinant of mass matrix [a * b of two tensors is the element-wise product]
-        det = (I11 * I22) - (I12 * I12)
+        det = (I11 * I22) - (I12 * I21)
 
         # compute Inverse of inertia matrix
         Irow1 = torch.cat((I22, -I12), 1)
@@ -210,6 +210,7 @@ class muscular_arm():
         # F-L/V dependency
         mus_l = 1 + self.M[0,:] * (self.theta0[0,:] - self.cur_j_state[:, 0].unsqueeze(1))/self.L0 + self.M[1,:] * (self.theta0[1,:] - self.cur_j_state[:, 1].unsqueeze(1))/self.L0
         mus_v = self.M[0, :] * self.cur_j_state[:, 2].unsqueeze(1)/self.L0 + self.M[1, :] * self.cur_j_state[:, 3].unsqueeze(1)/self.L0    
+        mus_v = -mus_v + 0.0 # mus_v = d (mus_l) / dt
         FL = torch.exp(-torch.abs((mus_l**self.beta - 1)/self.omega)**self.rho)
         FV = self.FV.clone()
         for i in range(0, 6):
