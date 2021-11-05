@@ -1,0 +1,29 @@
+{
+    "name": "PyTorch",
+    "image": "sethjuarez/torchvision-cpu-slim",
+	// Set *default* container specific settings.json values on container create.
+	"settings": { 
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "workbench.startupEditor": "none",
+        "files.autoSave": "afterDelay",
+        "python.dataScience.enabled": true,
+        "python.dataScience.alwaysTrustNotebooks": true,
+        "python.insidersChannel": "weekly",
+        "python.showStartPage": false
+	},
+
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+        "ms-python.python"
+	]
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "python --version",
+
+	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
+	// "remoteUser": "vscode"
+}
+

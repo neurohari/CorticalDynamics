@@ -43,7 +43,6 @@ from torch.autograd import gradcheck
 import numpy as np
 import matplotlib.pyplot as plt
 from torch.distributions import normal
-import scipy.io
 from NetworkClass import feedback_controller, costCriterionReaching
 import time
 
@@ -254,28 +253,7 @@ while num_optimizations <= max_simulations:
             plt.plot(input_targ_seq[:, 2, 0].data.cpu().numpy(), '--')
             plt.plot(reach_sim.collector_jointstate[:, 16, 0].data.cpu().numpy())
             plt.show()
-            # 
-            
-        if epoch%100 == 0:
-            outplayer_data = reach_sim.collector_outplayeractivity.data.cpu().numpy()
-            scipy.io.savemat('data/M1_'+file_name+sim_number+'.mat', {'m1data':outplayer_data})
-    
-            muscle_data = reach_sim.collector_muscleactivity.data.cpu().numpy()
-            scipy.io.savemat('data/Mus_'+file_name+sim_number+'.mat', {'musdata':muscle_data})
-            
-            cartesiankin_data = reach_sim.collector_cartesianstate.data.cpu().numpy()
-            scipy.io.savemat('data/Cartkin_'+file_name+sim_number+'.mat', {'cartkindata':cartesiankin_data})
-            
-            jointkin_data = reach_sim.collector_jointstate.data.cpu().numpy()
-            scipy.io.savemat('data/Jointkin_'+file_name+sim_number+'.mat', {'jointkindata':jointkin_data})
-                
-            networkinp_data = reach_sim.collector_networkinputs.data.cpu().numpy()
-            scipy.io.savemat('data/Inp_'+file_name+sim_number+'.mat', {'inpdata':networkinp_data})
-            
-            inplayer_data = reach_sim.collector_inplayeractivity.data.cpu().numpy()
-            scipy.io.savemat('data/S1_'+file_name+sim_number+'.mat', {'s1data':inplayer_data})
-            
-            
+            #             
             torch.save(reach_sim.state_dict(), 'ReachTrainednet_'+file_name+sim_number+'.pth')
     
     num_optimizations += 1
