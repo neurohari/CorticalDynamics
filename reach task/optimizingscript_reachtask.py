@@ -45,10 +45,13 @@ import matplotlib.pyplot as plt
 from torch.distributions import normal
 import scipy.io
 from NetworkClass import feedback_controller, costCriterionReaching
+import time
 
 use_cuda = 'false'
 device = torch.device('cuda:0' if use_cuda else 'cpu')
 device = 'cpu'
+
+doplot = False
 
 # time-settings
 # To enable fast optimization, time durations have been reduced from the original
@@ -180,6 +183,7 @@ while num_optimizations <= max_simulations:
 
     # Run the optimization until the end of epochs (or can be modified to run 
     # until a satisfactory error is reached)
+    t1 = time.time()
     for epoch in range(1, EPOCHS):
         # set variable preparation time-delay 
         variable_movinit_delay = np.random.randint(hold_cue_time, hold_cue_time + 1)
@@ -218,11 +222,14 @@ while num_optimizations <= max_simulations:
         total_loss_for_plotting[epoch] = loss.item()
                        
         if epoch%100 == 0:
+            t2 = time.time()
+            print('{:8.3f} sec for {:8f} epochs'.format(t2-t1,epoch))
+            t1 = time.time()
             print("Cur instance Loss: {:.6f}".format(loss.item()), end=' ')
             print(' after Epoch number: {}/{}...'.format(epoch, EPOCHS), end=' ')
             print('num_optimizations: {}/{}'.format(num_optimizations, max_simulations, ))
             
-        if epoch%200 == 0:
+        if (epoch%200 == 0) and doplot:
             # Plot the deisred and followed arm trajectory
             plt.figure()
             plt.plot(reach_sim.collector_cartesianstate[:,:,0].data.cpu().numpy(), reach_sim.collector_cartesianstate[:,:,1].data.cpu().numpy())
