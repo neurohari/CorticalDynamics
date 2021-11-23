@@ -22,3 +22,11 @@ Each folder has three python scripts.
 3. Data is saved as .mat files in the folders named "data"
 
 
+## Reference
+
+The code is a part of research article titled "Rotational dynamics in motor cortex are consistent with a feedback controller" in eLife (DOI: 10.7554/eLife.67256). For citing this code, please use
+
+eLife 2021;10:e67256
+
+
+
