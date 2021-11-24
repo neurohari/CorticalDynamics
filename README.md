@@ -24,7 +24,7 @@ Each folder has three python scripts.
 
 ## Reference
 
-The code is a part of research article titled "Rotational dynamics in motor cortex are consistent with a feedback controller" in eLife (DOI: 10.7554/eLife.67256). For citing this code, please use
+The code is a part of research article titled "Rotational dynamics in motor cortex are consistent with a feedback controller" in eLife (DOI: 10.7554/eLife.67256). 
 
 eLife 2021;10:e67256
 
